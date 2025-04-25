@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Game Encyclopedia - Home</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row row-cols-1 g-4">
+        <div class="col">
+            <h1>Game Encyclopedia</h1>
+            <p class="lead">Discover and explore your favorite video games!</p>
+        </div>
+        <div class="col" th:each="game : ${games}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${game.title}">Game Title</h5>
