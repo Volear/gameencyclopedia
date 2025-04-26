@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Game Encyclopedia</title>-->
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!-- Additional head content -->
+  <th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" th:href="@{/}">Game Encyclopedia</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/game/new}">Add Game</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/about}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/contact}">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-4 mb-4">
+  <!-- Messages -->
+  <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${errorMessage}">Error message</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}">Success message</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Content -->
+  <div layout:fragment="content">
+    <!-- Content will be inserted here -->
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-auto">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h5>Game Encyclopedia</h5>
+        <p>Your one-stop destination for video game information.</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p>&copy; 2025 Game Encyclopedia. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Additional scripts -->
+<th:block layout:fragment="scripts"></th:block>
+</body>
+</html>

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -69,5 +70,29 @@ public class GameService {
 
     public long totalNumberOfGames() {
         return gameRepository.count();
+    }
+
+    public List<GameDTO> searchGames(String query, String searchType) {
+        List<Game> results;
+
+        switch (searchType) {
+            case "title":
+                results = gameRepository.findByTitleContainingIgnoreCase(query);
+                break;
+            case "developer":
+                results = gameRepository.findByDeveloperContainingIgnoreCase(query);
+                break;
+            case "genre":
+                results = gameRepository.findByGenreContainingIgnoreCase(query);
+                break;
+            case "all":
+            default:
+                results = gameRepository.searchByAnyField(query);
+                break;
+        }
+
+        return results.stream()
+                .map(GameDTO::fromGame)
+                .collect(Collectors.toList());
     }
 }
