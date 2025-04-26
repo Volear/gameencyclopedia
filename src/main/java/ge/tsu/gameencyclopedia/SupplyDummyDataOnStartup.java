@@ -21,9 +21,7 @@ public class SupplyDummyDataOnStartup implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Check if database is empty
         if (gameRepository.count() == 0) {
-            // Create sample games
             Game game1 = new Game();
             game1.setTitle("Disco Elyisum");
             game1.setDeveloper("ZA/UM");
@@ -54,7 +52,6 @@ public class SupplyDummyDataOnStartup implements CommandLineRunner {
                     "and mining inside a procedurally generated 2D world. It has several world difficulties, as well as a character class system.");
             game3 = gameRepository.save(game3);
 
-            // Add reviews
             Review review1 = new Review();
             review1.setAuthor("John Doe");
             review1.setRating(5);

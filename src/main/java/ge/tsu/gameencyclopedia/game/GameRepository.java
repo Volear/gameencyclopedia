@@ -19,7 +19,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     List<Game> findByGenreContainingIgnoreCase(String genre);
 
-    // Fixed JPQL query
     @Query(value = "SELECT * FROM GAMES g WHERE " +
             "LOWER(g.TITLE) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(g.DEVELOPER) LIKE LOWER(CONCAT('%', :query, '%')) OR " +

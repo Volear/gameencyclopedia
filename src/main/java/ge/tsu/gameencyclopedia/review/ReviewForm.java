@@ -18,7 +18,6 @@ public class ReviewForm {
     @NotNull(message = "Game ID is required")
     private Long gameId;
 
-    // Getters and Setters
     public String getAuthor() {
         return author;
     }

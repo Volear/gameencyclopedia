@@ -17,10 +17,9 @@ public class ReviewService {
 
     @Transactional
     public ReviewDTO saveReview(String author, Integer rating, String content, Long gameId) {
-        // Find the game
+
         Game game = gameService.findById(gameId);
 
-        // Create and save the review
         Review review = new Review();
         review.setAuthor(author);
         review.setRating(rating);

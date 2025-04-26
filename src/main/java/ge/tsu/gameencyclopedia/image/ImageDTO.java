@@ -15,7 +15,6 @@ public class ImageDTO {
         return imageDTO;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

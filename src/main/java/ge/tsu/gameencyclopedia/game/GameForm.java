@@ -28,7 +28,6 @@ public class GameForm {
 
     private List<MultipartFile> images;
 
-    // Getters and Setters
     public String getTitle() {
         return title;
     }

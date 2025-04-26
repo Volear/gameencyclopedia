@@ -21,7 +21,6 @@ public class ReviewDTO {
         return reviewDTO;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

@@ -26,7 +26,7 @@ public class SearchController {
     public String searchResults(@RequestParam("query") String query,
                                @RequestParam("searchType") String searchType,
                                Model model) {
-        // Search games
+
         List<GameDTO> results = gameService.searchGames(query, searchType);
         model.addAttribute("results", results);
         model.addAttribute("query", query);

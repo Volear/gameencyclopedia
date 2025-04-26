@@ -23,7 +23,6 @@ public class GameController {
     public String viewGame(@PathVariable Long id, Model model) {
         model.addAttribute("game", gameService.findGameById(id));
 
-        // Add empty review form for users to submit reviews
         if (!model.containsAttribute("reviewForm")) {
             ReviewForm reviewForm = new ReviewForm();
             reviewForm.setGameId(id);

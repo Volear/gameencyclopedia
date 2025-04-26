@@ -48,7 +48,6 @@ public class GameService {
         game.setDescription(description);
         game = gameRepository.save(game);
 
-        // Process and save image files
         if (imageFiles != null && !imageFiles.isEmpty()) {
             List<Image> images = new ArrayList<>();
             for (MultipartFile imageFile : imageFiles) {

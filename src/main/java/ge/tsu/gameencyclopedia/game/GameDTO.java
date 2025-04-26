@@ -37,7 +37,6 @@ public class GameDTO {
                 .map(ReviewDTO::fromReview)
                 .collect(Collectors.toList()));
 
-        // Calculate average rating
         double avgRating = game.getReviews().stream()
                 .mapToInt(review -> review.getRating())
                 .average()
@@ -47,7 +46,6 @@ public class GameDTO {
         return gameDTO;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

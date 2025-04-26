@@ -17,7 +17,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-        // Override sorting logic to show newest games first
         Sort sort = Sort.by(Sort.Order.by("createTime").with(Sort.Direction.DESC));
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 

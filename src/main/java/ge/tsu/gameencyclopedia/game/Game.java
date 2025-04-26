@@ -51,7 +51,6 @@ public class Game {
         excerpt = StringUtils.abbreviate(description, 150);
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
