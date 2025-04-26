@@ -25,33 +25,33 @@ public class SupplyDummyDataOnStartup implements CommandLineRunner {
         if (gameRepository.count() == 0) {
             // Create sample games
             Game game1 = new Game();
-            game1.setTitle("The Witcher 3: Wild Hunt");
-            game1.setDeveloper("CD Projekt RED");
-            game1.setReleaseYear(2015);
-            game1.setGenre("RPG");
-            game1.setDescription("The Witcher 3: Wild Hunt is an action role-playing game developed by CD Projekt RED. " +
-                    "Players control Geralt of Rivia, a monster hunter known as a Witcher. " +
-                    "Geralt is looking for his missing adopted daughter, who is on the run from the Wild Hunt.");
+            game1.setTitle("Disco Elyisum");
+            game1.setDeveloper("ZA/UM");
+            game1.setReleaseYear(2019);
+            game1.setGenre("Role-playing");
+            game1.setDescription("Disco Elysium is set in the district of Martinaise, " +
+                    "in and around Terminal B of the Greater Revachol Industrial Harbour, both located in West Revachol, " +
+                    "in the Insulinde isola, and taking place in the year '51 of the Current Century.");
             game1 = gameRepository.save(game1);
 
             Game game2 = new Game();
-            game2.setTitle("Red Dead Redemption 2");
-            game2.setDeveloper("Rockstar Games");
-            game2.setReleaseYear(2018);
-            game2.setGenre("Action-Adventure");
-            game2.setDescription("Red Dead Redemption 2 is a western-themed action-adventure game. " +
-                    "Set in 1899, it follows the story of outlaw Arthur Morgan, a member of the Van der Linde gang. " +
-                    "The game features both single-player and online multiplayer components.");
+            game2.setTitle("Darkest Dungeon");
+            game2.setDeveloper("Red Hook Studios/Sickhead Games");
+            game2.setReleaseYear(2015);
+            game2.setGenre("Rogelike/Strategy");
+            game2.setDescription("Darkest Dungeon is a hard-core RPG about the stresses of dungeon crawling. " +
+                    "You will lead a band of four Heroes on a perilous side-scrolling descent, " +
+                    "dealing with a prodigious number of threats to their bodily health, and worse.");
             game2 = gameRepository.save(game2);
 
             Game game3 = new Game();
-            game3.setTitle("God of War");
-            game3.setDeveloper("Santa Monica Studio");
-            game3.setReleaseYear(2018);
+            game3.setTitle("Terraria");
+            game3.setDeveloper("Re-Logic");
+            game3.setReleaseYear(2011);
             game3.setGenre("Action-Adventure");
-            game3.setDescription("God of War is an action-adventure game that follows Kratos, " +
-                    "a former Greek god of war, and his young son Atreus. " +
-                    "The game is a soft reboot of the God of War series, and shifts from Greek mythology to Norse mythology.");
+            game3.setDescription("Terraria is action-adventure sandbox game developed by Re-Logic and published by 505 Games. " +
+                    "The game features exploration, combat, crafting, building, " +
+                    "and mining inside a procedurally generated 2D world. It has several world difficulties, as well as a character class system.");
             game3 = gameRepository.save(game3);
 
             // Add reviews
