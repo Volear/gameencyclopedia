@@ -66,9 +66,7 @@ public class AuthController {
         }
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("registerForm", form);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registerForm", result);
-            return "redirect:/auth/register";
+            return "auth/register";
         }
 
         try {
@@ -84,9 +82,8 @@ public class AuthController {
                     "Registration successful! Please log in with your credentials.");
             return "redirect:/auth/login";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Registration failed: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("registerForm", form);
-            return "redirect:/auth/register";
+            result.rejectValue("global", "error.global", "Registration failed: " + e.getMessage());
+            return "auth/register";
         }
     }
 }

@@ -5,79 +5,40 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USERNAME", unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(name = "EMAIL", unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "FIRST_NAME")
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "ENABLED", nullable = false)
-    private boolean enabled = true;
-
-    @Column(name = "CREATE_TIME", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime createTime;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE", nullable = false)
-    private Role role = Role.USER;
-
-    @PrePersist
-    protected void onCreate() {
-        createTime = LocalDateTime.now();
-    }
+    @Column(nullable = false)
+    private Role role;
 
     public enum Role {
         USER, ADMIN
     }
 
-    // UserDetails implementation
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -102,6 +63,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -126,18 +88,6 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -146,10 +96,28 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public String getFullName() {
-        if (firstName != null && lastName != null) {
-            return firstName + " " + lastName;
-        }
-        return username;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
