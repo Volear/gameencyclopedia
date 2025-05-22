@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title th:text="${game.title} + ' - Game Encyclopedia'">Game Details</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="row">
+    <div class="col-md-8">
+      <h1 th:text="${game.title}">Game Title</h1>
+      <div class="game-info mb-4">
+        <p><strong>Developer:</strong> <span th:text="${game.developer}">Developer</span></p>
+        <p><strong>Release Year:</strong> <span th:text="${game.releaseYear}">Year</span></p>
+        <p><strong>Genre:</strong> <span th:text="${game.genre}">Genre</span></p>
+        <p><strong>Average Rating:</strong>
+          <span th:text="${game.averageRating > 0 ? #numbers.formatDecimal(game.averageRating, 1, 1) + '/5' : 'Not rated'}">Rating</span>
+        </p>
+      </div>
+
+      <div class="description mb-4">
+        <h3>Description</h3>
+        <p th:text="${game.description}">Game description</p>
+      </div>
+
+      <div class="reviews">
+        <h3>Reviews (<span th:text="${game.reviews.size()}">0</span>)</h3>
+        <div th:each="review : ${game.reviews}" class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${review.author}">Author</h5>
+            <div class="rating mb-2">
+              <span th:each="i : ${#numbers.sequence(1, review.rating)}" class="text-warning">★</span>
+              <span th:each="i : ${#numbers.sequence(review.rating + 1, 5)}" class="text-muted">☆</span>
+            </div>
+            <p class="card-text" th:text="${review.content}">Review content</p>
+            <small class="text-muted" th:text="${review.prettyCreateTime}">Date</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" sec:authorize="isAuthenticated()">
+      <div class="card">
+        <div class="card-header">
+          <h5>Add Your Review</h5>
+        </div>
+        <div class="card-body">
+          <form th:action="@{/review/add}" method="post" th:object="${reviewForm}">
+            <input type="hidden" th:field="*{gameId}" />
+            <div class="mb-3">
+              <label for="author" class="form-label">Your Name</label>
+              <input type="text" class="form-control" id="author" th:field="*{author}"
+                     th:classappend="${#fields.hasErrors('author')} ? 'is-invalid' : ''" required>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
+            </div>
+            <div class="mb-3">
+              <label for="rating" class="form-label">Rating</label>
+              <select class="form-select" id="rating" th:field="*{rating}"
+                      th:classappend="${#fields.hasErrors('rating')} ? 'is-invalid' : ''" required>
+                <option value="">Choose rating...</option>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+              </select>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"></div>
+            </div>
+            <div class="mb-3">
+              <label for="content" class="form-label">Review</label>
+              <textarea class="form-control" id="content" th:field="*{content}" rows="4"
+                        th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''" required></textarea>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

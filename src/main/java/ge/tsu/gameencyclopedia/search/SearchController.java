@@ -24,13 +24,13 @@ public class SearchController {
 
     @PostMapping("/search")
     public String searchResults(@RequestParam("query") String query,
-                               @RequestParam("searchType") String searchType,
-                               Model model) {
+                                @RequestParam("searchType") String searchType,
+                                Model model) {
 
         List<GameDTO> results = gameService.searchGames(query, searchType);
         model.addAttribute("results", results);
         model.addAttribute("query", query);
         model.addAttribute("searchType", searchType);
-        return "search/search_results";
+        return "search/search_results"; 
     }
 }
