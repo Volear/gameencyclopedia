@@ -4,8 +4,11 @@ import ge.tsu.gameencyclopedia.game.Game;
 import ge.tsu.gameencyclopedia.game.GameRepository;
 import ge.tsu.gameencyclopedia.review.Review;
 import ge.tsu.gameencyclopedia.review.ReviewRepository;
+import ge.tsu.gameencyclopedia.user.User;
+import ge.tsu.gameencyclopedia.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,11 +22,50 @@ public class SupplyDummyDataOnStartup implements CommandLineRunner {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) {
+        if (userRepository.count() == 0) {
+            // Create admin user
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setEmail("admin@gameencyclopedia.com");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setFirstName("Admin");
+            admin.setLastName("User");
+            admin.setRole(User.Role.ADMIN);
+            userRepository.save(admin);
+
+            // Create regular users
+            User user1 = new User();
+            user1.setUsername("johndoe");
+            user1.setEmail("john@example.com");
+            user1.setPassword(passwordEncoder.encode("password123"));
+            user1.setFirstName("John");
+            user1.setLastName("Doe");
+            user1.setRole(User.Role.USER);
+            userRepository.save(user1);
+
+            User user2 = new User();
+            user2.setUsername("janesmith");
+            user2.setEmail("jane@example.com");
+            user2.setPassword(passwordEncoder.encode("password123"));
+            user2.setFirstName("Jane");
+            user2.setLastName("Smith");
+            user2.setRole(User.Role.USER);
+            userRepository.save(user2);
+
+            System.out.println("Sample users have been created!");
+        }
+
         if (gameRepository.count() == 0) {
             Game game1 = new Game();
-            game1.setTitle("Disco Elyisum");
+            game1.setTitle("Disco Elysium");
             game1.setDeveloper("ZA/UM");
             game1.setReleaseYear(2019);
             game1.setGenre("Role-playing");
@@ -36,7 +78,7 @@ public class SupplyDummyDataOnStartup implements CommandLineRunner {
             game2.setTitle("Darkest Dungeon");
             game2.setDeveloper("Red Hook Studios/Sickhead Games");
             game2.setReleaseYear(2015);
-            game2.setGenre("Rogelike/Strategy");
+            game2.setGenre("Roguelike/Strategy");
             game2.setDescription("Darkest Dungeon is a hard-core RPG about the stresses of dungeon crawling. " +
                     "You will lead a band of four Heroes on a perilous side-scrolling descent, " +
                     "dealing with a prodigious number of threats to their bodily health, and worse.");

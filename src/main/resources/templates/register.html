@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{register.title}">Register - Game Encyclopedia</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center mb-0" th:text="#{register.header}">Create Account</h3>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/auth/register}" method="post" th:object="${registerForm}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label" th:text="#{register.firstName}">First Name</label>
+                                <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label" th:text="#{register.lastName}">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label" th:text="#{register.username}">Username</label>
+                            <input type="text" class="form-control" id="username" th:field="*{username}"
+                                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label" th:text="#{register.email}">Email</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label" th:text="#{register.password}">Password</label>
+                            <input type="password" class="form-control" id="password" th:field="*{password}"
+                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label" th:text="#{register.confirmPassword}">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}"
+                                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary" th:text="#{register.submit}">Create Account</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-muted" th:text="#{register.have_account}">Already have an account?</small>
+                    <a th:href="@{/auth/login}" th:text="#{register.login_link}">Login here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

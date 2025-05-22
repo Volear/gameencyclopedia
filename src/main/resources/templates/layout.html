@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,24 +12,65 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/}">Game Encyclopedia</a>
+    <a class="navbar-brand" th:href="@{/}" th:text="#{nav.brand}">Game Encyclopedia</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/}">Home</a>
+          <a class="nav-link" th:href="@{/}" th:text="#{nav.home}">Home</a>
+        </li>
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+          <a class="nav-link" th:href="@{/game/new}" th:text="#{nav.addGame}">Add Game</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/game/new}">Add Game</a>
+          <a class="nav-link" th:href="@{/search}" th:text="#{nav.search}">Search</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/about}">About</a>
+          <a class="nav-link" th:href="@{/about}" th:text="#{nav.about}">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/contact}">Contact</a>
+          <a class="nav-link" th:href="@{/contact}" th:text="#{nav.contact}">Contact</a>
+        </li>
+      </ul>
+
+      <!-- Language Selector -->
+      <div class="navbar-nav me-3">
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
+            <i class="fas fa-globe"></i> <span th:text="#{nav.language}">Language</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" th:href="@{''(lang=en)}">English</a></li>
+            <li><a class="dropdown-item" th:href="@{''(lang=ka)}">ქართული</a></li>
+            <li><a class="dropdown-item" th:href="@{''(lang=ru)}">Русский</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Authentication Links -->
+      <ul class="navbar-nav">
+        <li class="nav-item" sec:authorize="!isAuthenticated()">
+          <a class="nav-link" th:href="@{/auth/login}" th:text="#{nav.login}">Login</a>
+        </li>
+        <li class="nav-item" sec:authorize="!isAuthenticated()">
+          <a class="nav-link" th:href="@{/auth/register}" th:text="#{nav.register}">Register</a>
+        </li>
+        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+            <span th:text="${#authentication.name}">User</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" th:text="#{nav.profile}">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form th:action="@{/auth/logout}" method="post" class="d-inline">
+                <button type="submit" class="dropdown-item" th:text="#{nav.logout}">Logout</button>
+              </form>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
@@ -52,11 +95,11 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <h5>Game Encyclopedia</h5>
-        <p>Your one-stop destination for video game information.</p>
+        <h5 th:text="#{footer.title}">Game Encyclopedia</h5>
+        <p th:text="#{footer.description}">Your one-stop destination for video game information.</p>
       </div>
       <div class="col-md-6 text-md-end">
-        <p>&copy; 2025 Game Encyclopedia. All rights reserved.</p>
+        <p th:text="#{footer.copyright}">© 2025 Game Encyclopedia. All rights reserved.</p>
       </div>
     </div>
   </div>

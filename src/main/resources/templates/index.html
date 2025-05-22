@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
+      layout:decorate="~{layout.html}"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Game Encyclopedia - Home</title>
+    <title th:text="#{home.title}">Game Encyclopedia - Home</title>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="row row-cols-1 g-4">
         <div class="col">
-            <h1>Game Encyclopedia</h1>
-            <p class="lead">Discover and explore your favorite video games!</p>
+            <h1 th:text="#{home.header}">Game Encyclopedia</h1>
+            <p class="lead" th:text="#{home.description}">Discover and explore your favorite video games!</p>
             <div class="mb-4">
-                <a href="/game/new" class="btn btn-primary">Add New Game</a>
-                <a href="/search" class="btn btn-outline-primary ms-2">Search Games</a>
+                <a href="/game/new" class="btn btn-primary"
+                   sec:authorize="isAuthenticated()"
+                   th:text="#{home.addNewGame}">Add New Game</a>
+                <a href="/search" class="btn btn-outline-primary ms-2"
+                   th:text="#{home.searchGames}">Search Games</a>
             </div>
         </div>
         <div class="col" th:each="game : ${games}">
@@ -28,14 +33,18 @@
                     <p class="card-text" th:text="${game.excerpt}">Game excerpt...</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <span class="badge bg-primary" th:text="${game.averageRating > 0 ? game.averageRating + '/5' : 'Not rated'}">Rating</span>
-                            <span class="text-muted ms-2" th:text="${game.reviews.size() + ' review(s)'}">Reviews</span>
+                            <span class="badge bg-primary"
+                                  th:text="${game.averageRating > 0 ? #numbers.formatDecimal(game.averageRating, 1, 1) + '/5' : #messages.msg('home.notRated')}">Rating</span>
+                            <span class="text-muted ms-2"
+                                  th:text="${game.reviews.size()} + ' ' + #{home.reviews}">Reviews</span>
                         </div>
-                        <a th:href="@{'/game/' + ${game.id}}" class="btn btn-sm btn-outline-primary">View Details</a>
+                        <a th:href="@{'/game/' + ${game.id}}"
+                           class="btn btn-sm btn-outline-primary"
+                           th:text="#{home.viewDetails}">View Details</a>
                     </div>
                 </div>
                 <div class="card-footer text-muted">
-                    <small th:text="'Added ' + ${game.prettyCreateTime}">Added time</small>
+                    <small th:text="#{home.added} + ' ' + ${game.prettyCreateTime}">Added time</small>
                 </div>
             </div>
         </div>
@@ -44,7 +53,7 @@
                 <ul class="pagination justify-content-center">
                     <li class="page-item" th:classappend="${page == 0 ? 'disabled' : ''}">
                         <a class="page-link" th:href="@{'/?page=' + ${page - 1}}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
+                            <span aria-hidden="true" th:text="#{common.previous}">&laquo;</span>
                         </a>
                     </li>
                     <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
@@ -53,7 +62,7 @@
                     </li>
                     <li class="page-item" th:classappend="${page == totalPages - 1 ? 'disabled' : ''}">
                         <a class="page-link" th:href="@{'/?page=' + ${page + 1}}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
+                            <span aria-hidden="true" th:text="#{common.next}">&raquo;</span>
                         </a>
                     </li>
                 </ul>
