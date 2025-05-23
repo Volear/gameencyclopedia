@@ -31,7 +31,6 @@ public class SupplyDummyDataOnStartup implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (userRepository.count() == 0) {
-            // Create admin user
             User admin = new User();
             admin.setUsername("admin");
             admin.setEmail("admin@gameencyclopedia.com");
@@ -41,7 +40,6 @@ public class SupplyDummyDataOnStartup implements CommandLineRunner {
             admin.setRole(User.Role.ADMIN);
             userRepository.save(admin);
 
-            // Create regular users
             User user1 = new User();
             user1.setUsername("johndoe");
             user1.setEmail("john@example.com");
