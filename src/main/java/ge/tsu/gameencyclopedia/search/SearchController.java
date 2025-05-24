@@ -31,6 +31,6 @@ public class SearchController {
         model.addAttribute("results", results);
         model.addAttribute("query", query);
         model.addAttribute("searchType", searchType);
-        return "search/search_results"; 
+        return "search/search_results";
     }
 }

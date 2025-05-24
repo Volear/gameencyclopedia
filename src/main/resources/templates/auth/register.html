@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      th:lang="${#locale.language}">
 <head>
     <title th:text="#{register.title}">Register - Game Encyclopedia</title>
+    <meta name="description" th:content="#{register.meta.description}" content="Create an account on Game Encyclopedia">
 </head>
 <body>
 <div layout:fragment="content">
@@ -14,40 +16,60 @@
                     <h3 class="text-center mb-0" th:text="#{register.header}">Create Account</h3>
                 </div>
                 <div class="card-body">
+                    <!-- Registration error message -->
+                    <div th:if="${registrationError}" class="alert alert-danger mb-3" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span th:text="${registrationError}">Error message</span>
+                    </div>
+
                     <form th:action="@{/auth/register}" method="post" th:object="${registerForm}">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="firstName" class="form-label" th:text="#{register.firstName}">First Name</label>
-                                <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+                                <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+                                       th:placeholder="#{register.firstName.placeholder}" placeholder="Enter your first name">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="lastName" class="form-label" th:text="#{register.lastName}">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+                                <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+                                       th:placeholder="#{register.lastName.placeholder}" placeholder="Enter your last name">
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label" th:text="#{register.username}">Username</label>
                             <input type="text" class="form-control" id="username" th:field="*{username}"
-                                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''" required>
+                                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+                                   th:placeholder="#{register.username.placeholder}" placeholder="Choose a username" required>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                            <small class="form-text text-muted" th:text="#{register.username.help}">Username must be between 3 and 20 characters</small>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label" th:text="#{register.email}">Email</label>
                             <input type="email" class="form-control" id="email" th:field="*{email}"
-                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" required>
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                   th:placeholder="#{register.email.placeholder}" placeholder="Enter your email address" required>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label" th:text="#{register.password}">Password</label>
                             <input type="password" class="form-control" id="password" th:field="*{password}"
-                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" required>
+                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                   th:placeholder="#{register.password.placeholder}" placeholder="Create a password" required>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                            <small class="form-text text-muted" th:text="#{register.password.help}">Password must be at least 6 characters long</small>
                         </div>
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label" th:text="#{register.confirmPassword}">Confirm Password</label>
                             <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}"
-                                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''" required>
+                                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''"
+                                   th:placeholder="#{register.confirmPassword.placeholder}" placeholder="Confirm your password" required>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                            <label class="form-check-label" for="terms">
+                                <span th:utext="#{register.terms.agreement}">I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></span>
+                            </label>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary" th:text="#{register.submit}">Create Account</button>

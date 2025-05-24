@@ -1,45 +1,107 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      th:lang="${#locale.language}">
 <head>
-    <title th:text="#{about.title}">About - Game Encyclopedia</title>
+    <title th:text="#{about.title} + ' - ' + #{app.name}">About - Game Encyclopedia</title>
+    <meta name="description" th:content="#{about.meta.description}" content="Learn about the Game Encyclopedia project, our mission, features, and team">
 </head>
 <body>
 <div layout:fragment="content">
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <h1 th:text="#{about.header}">About Game Encyclopedia</h1>
-            <p class="lead">Your ultimate source for video game information and reviews</p>
+            <div class="text-center mb-4">
+                <h1 th:text="#{about.header}">About Game Encyclopedia</h1>
+                <p class="lead" th:text="#{about.tagline}">Your ultimate source for video game information and reviews</p>
+            </div>
 
-            <div class="card mb-4">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}" th:text="#{common.home}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page" th:text="#{about.title}">About</li>
+                </ol>
+            </nav>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0" th:text="#{about.mission}">Our Mission</h2>
+                </div>
                 <div class="card-body">
-                    <h2 th:text="#{about.mission}">Our Mission</h2>
-                    <p th:utext="#{about.mission.content}">Game Encyclopedia aims to be a comprehensive resource for gamers to discover, explore, and share their experiences with video games. We strive to provide accurate information, honest reviews, and a platform for gamers to connect and discuss their favorite titles.</p>
+                    <p th:utext="#{about.mission.content}" class="mb-0">Game Encyclopedia aims to be a comprehensive resource for gamers to discover, explore, and share their experiences with video games. We strive to provide accurate information, honest reviews, and a platform for gamers to connect and discuss their favorite titles.</p>
                 </div>
             </div>
 
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0" th:text="#{about.features}">Features</h2>
+                </div>
                 <div class="card-body">
-                    <h2 th:text="#{about.features}">Features</h2>
-                    <ul>
-                        <li th:text="#{about.features.database}">Comprehensive database of video games across platforms and genres</li>
-                        <li th:text="#{about.features.reviews}">User-submitted reviews and ratings</li>
-                        <li th:text="#{about.features.information}">Detailed information about developers, release dates, and genres</li>
-                        <li th:text="#{about.features.search}">Search functionality to easily find games</li>
-                        <li th:text="#{about.features.community}">Community-driven content and discussions</li>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex">
+                            <i class="fas fa-database me-3 text-primary"></i>
+                            <span th:text="#{about.features.database}">Comprehensive database of video games across platforms and genres</span>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <i class="fas fa-star me-3 text-primary"></i>
+                            <span th:text="#{about.features.reviews}">User-submitted reviews and ratings</span>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <i class="fas fa-info-circle me-3 text-primary"></i>
+                            <span th:text="#{about.features.information}">Detailed information about developers, release dates, and genres</span>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <i class="fas fa-search me-3 text-primary"></i>
+                            <span th:text="#{about.features.search}">Search functionality to easily find games</span>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <i class="fas fa-users me-3 text-primary"></i>
+                            <span th:text="#{about.features.community}">Community-driven content and discussions</span>
+                        </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0" th:text="#{about.team}">Our Team</h2>
+                </div>
                 <div class="card-body">
-                    <h2 th:text="#{about.team}">Our Team</h2>
-                    <p th:utext="#{about.team.description}">Game Encyclopedia is a project developed by a team of passionate gamers and developers from Tbilisi State University. We welcome contributions from the gaming community to make this resource even better.</p>
-                    <p>
+                    <p th:utext="#{about.team.description}" class="mb-3">Game Encyclopedia is a project developed by a team of passionate gamers and developers from Tbilisi State University. We welcome contributions from the gaming community to make this resource even better.</p>
+
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-envelope me-2 text-primary"></i>
                         <span th:text="#{about.team.contact.prefix}">If you'd like to get involved or have any questions, please</span>
-                        <a href="/contact" th:text="#{about.team.contact.link}">contact us</a>.
-                    </p>
+                        <a th:href="@{/contact}" class="ms-1 text-decoration-none" th:text="#{about.team.contact.link}">contact us</a>.
+                    </div>
+
+                    <div class="mt-4">
+                        <h3 class="h6" th:text="#{about.languages}">Available Languages</h3>
+                        <div class="d-flex gap-2 mt-2">
+                            <a href="?lang=en" class="btn btn-sm btn-outline-secondary" th:classappend="${#locale.language == 'en'} ? 'active'">English</a>
+                            <a href="?lang=ka" class="btn btn-sm btn-outline-secondary" th:classappend="${#locale.language == 'ka'} ? 'active'">ქართული</a>
+                            <a href="?lang=ru" class="btn btn-sm btn-outline-secondary" th:classappend="${#locale.language == 'ru'} ? 'active'">Русский</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <i class="far fa-copyright me-1"></i>
+                            <span th:text="#{about.copyright.year}">2023</span>
+                            <span th:text="#{app.name}">Game Encyclopedia</span>
+                        </span>
+                        <div>
+                            <a href="https://github.com/yourusername/gameencyclopedia" target="_blank" class="text-muted me-2" th:title="#{about.github}">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://twitter.com/gameencyclopedia" target="_blank" class="text-muted" th:title="#{about.twitter}">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

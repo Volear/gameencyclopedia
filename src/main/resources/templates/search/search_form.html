@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      th:lang="${#locale.language}">
 <head>
     <title th:text="#{search.title}">Search - Game Encyclopedia</title>
+    <meta name="description" th:content="#{search.meta.description}" content="Search for games in our database">
 </head>
 <body>
 <div layout:fragment="content">
@@ -14,11 +16,15 @@
                     <h3 class="text-center mb-0" th:text="#{search.header}">Search Games</h3>
                 </div>
                 <div class="card-body">
-                    <form action="/search" method="post">
+                    <form th:action="@{/search}" method="get">
                         <div class="mb-3">
                             <label for="query" class="form-label" th:text="#{search.query}">Search Query</label>
-                            <input type="text" class="form-control" id="query" name="query" required
+                            <input type="text" class="form-control" id="query" name="q" required
+                                   th:placeholder="#{search.query.placeholder}"
                                    placeholder="Enter game title, developer, genre...">
+                            <div class="form-text" th:text="#{search.query.help}">
+                                Enter keywords to find games in our database
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="searchType" class="form-label" th:text="#{search.searchType}">Search Type</label>
@@ -27,12 +33,72 @@
                                 <option value="title" th:text="#{search.title_field}">Title</option>
                                 <option value="developer" th:text="#{search.developer_field}">Developer</option>
                                 <option value="genre" th:text="#{search.genre_field}">Genre</option>
+                                <option value="description" th:text="#{search.description_field}">Description</option>
                             </select>
+                            <div class="form-text" th:text="#{search.searchType.help}">
+                                Narrow your search to specific fields
+                            </div>
                         </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary" th:text="#{search.submit}">Search</button>
+
+                        <!-- Advanced search options (collapsible) -->
+                        <div class="mb-3">
+                            <a class="d-block text-decoration-none" data-bs-toggle="collapse" href="#advancedOptions" role="button" aria-expanded="false" aria-controls="advancedOptions">
+                                <i class="fas fa-caret-down me-1"></i>
+                                <span th:text="#{search.advancedOptions}">Advanced Options</span>
+                            </a>
+                            <div class="collapse mt-2" id="advancedOptions">
+                                <div class="card card-body bg-light">
+                                    <div class="mb-3">
+                                        <label for="releaseYear" class="form-label" th:text="#{search.releaseYear}">Release Year</label>
+                                        <input type="number" class="form-control" id="releaseYear" name="releaseYear"
+                                               min="1970" th:max="${#dates.format(#dates.createNow(), 'yyyy')}"
+                                               th:placeholder="#{search.releaseYear.placeholder}"
+                                               placeholder="Filter by release year">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="minRating" class="form-label" th:text="#{search.minRating}">Minimum Rating</label>
+                                        <select class="form-select" id="minRating" name="minRating">
+                                            <option value="" th:text="#{search.any}">Any Rating</option>
+                                            <option value="1">★☆☆☆☆ (1+)</option>
+                                            <option value="2">★★☆☆☆ (2+)</option>
+                                            <option value="3">★★★☆☆ (3+)</option>
+                                            <option value="4">★★★★☆ (4+)</option>
+                                            <option value="4.5">★★★★½ (4.5+)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>
+                                <span th:text="#{search.submit}">Search</span>
+                            </button>
+                            <a th:href="@{/}" class="btn btn-outline-secondary">
+                                <i class="fas fa-home me-2"></i>
+                                <span th:text="#{search.backToHome}">Back to Home</span>
+                            </a>
                         </div>
                     </form>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-muted" th:text="#{search.footer}">
+                        Our database contains games from various platforms and genres
+                    </small>
+                </div>
+            </div>
+
+            <!-- Recent searches section -->
+            <div class="mt-4" th:if="${recentSearches != null && !recentSearches.empty}">
+                <h5 th:text="#{search.recentSearches}">Recent Searches</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    <a th:each="recentSearch : ${recentSearches}"
+                       th:href="@{/search(q=${recentSearch})}"
+                       class="badge bg-light text-dark text-decoration-none">
+                        <i class="fas fa-history me-1"></i>
+                        <span th:text="${recentSearch}">search term</span>
+                    </a>
                 </div>
             </div>
         </div>

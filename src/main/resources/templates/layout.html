@@ -1,57 +1,77 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Game Encyclopedia</title>
+  <meta name="language" th:content="${#locale.language}">
+  <meta th:if="${#locale.language == 'ar' || #locale.language == 'he'}" name="direction" content="rtl">
+  <title th:text="${title} ? ${title} + ' - ' + #{app.name} : #{app.name}">Game Encyclopedia</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css">
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <th:block layout:fragment="head"></th:block>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" th:dir="${#locale.language == 'ar' || #locale.language == 'he' ? 'rtl' : 'ltr'}">
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" th:href="@{/}">
-        <i class="fas fa-gamepad me-2"></i>
+      <a class="navbar-brand" th:href="@{/}" th:aria-label="#{nav.brand.aria}">
+        <i class="fas fa-gamepad me-2" aria-hidden="true"></i>
         <span th:text="#{nav.brand}">Game Encyclopedia</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              th:aria-label="#{nav.toggle}" aria-controls="navbarNav" aria-expanded="false">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/}" th:text="#{nav.home}">Home</a>
+            <a class="nav-link" th:href="@{/}" th:text="#{nav.home}" th:aria-label="#{nav.home.aria}">Home</a>
           </li>
           <li class="nav-item" sec:authorize="isAuthenticated()">
-            <a class="nav-link" th:href="@{/game/new}" th:text="#{nav.addGame}">Add Game</a>
+            <a class="nav-link" th:href="@{/game/new}" th:text="#{nav.addGame}" th:aria-label="#{nav.addGame.aria}">Add Game</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/search}" th:text="#{nav.search}">Search</a>
+            <a class="nav-link" th:href="@{/search}" th:text="#{nav.search}" th:aria-label="#{nav.search.aria}">Search</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/about}" th:text="#{nav.about}">About</a>
+            <a class="nav-link" th:href="@{/about}" th:text="#{nav.about}" th:aria-label="#{nav.about.aria}">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/contact}" th:text="#{nav.contact}">Contact</a>
+            <a class="nav-link" th:href="@{/contact}" th:text="#{nav.contact}" th:aria-label="#{nav.contact.aria}">Contact</a>
           </li>
         </ul>
 
         <!-- Language Selector -->
         <div class="navbar-nav me-3">
           <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
-              <i class="fas fa-globe"></i> <span th:text="#{nav.language}">Language</span>
+            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
+               data-bs-toggle="dropdown" th:aria-label="#{nav.language.aria}">
+              <i class="fas fa-globe" aria-hidden="true"></i>
+              <span th:text="#{nav.language}">Language</span>
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" th:href="@{''(lang=en)}"><i class="flag-icon flag-icon-us me-2"></i>English</a></li>
-              <li><a class="dropdown-item" th:href="@{''(lang=ka)}"><i class="flag-icon flag-icon-ge me-2"></i>ქართული</a></li>
-              <li><a class="dropdown-item" th:href="@{''(lang=ru)}"><i class="flag-icon flag-icon-ru me-2"></i>Русский</a></li>
+            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+              <li>
+                <a class="dropdown-item" th:href="@{''(lang=en)}" th:aria-label="#{lang.english.aria}">
+                  <span class="fi fi-us me-2" aria-hidden="true"></span>
+                  <span th:text="#{lang.english}">English</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{''(lang=es)}" th:aria-label="#{lang.spanish.aria}">
+                  <span class="fi fi-es me-2" aria-hidden="true"></span>
+                  <span th:text="#{lang.spanish}">Español</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{''(lang=de)}" th:aria-label="#{lang.german.aria}">
+                  <span class="fi fi-de me-2" aria-hidden="true"></span>
+                  <span th:text="#{lang.german}">Deutsch</span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -59,29 +79,32 @@
         <!-- Authentication Links -->
         <ul class="navbar-nav">
           <li class="nav-item" sec:authorize="!isAuthenticated()">
-            <a class="nav-link" th:href="@{/auth/login}">
-              <i class="fas fa-sign-in-alt me-1"></i>
+            <a class="nav-link" th:href="@{/auth/login}" th:aria-label="#{nav.login.aria}">
+              <i class="fas fa-sign-in-alt me-1" aria-hidden="true"></i>
               <span th:text="#{nav.login}">Login</span>
             </a>
           </li>
           <li class="nav-item" sec:authorize="!isAuthenticated()">
-            <a class="nav-link" th:href="@{/auth/register}">
-              <i class="fas fa-user-plus me-1"></i>
+            <a class="nav-link" th:href="@{/auth/register}" th:aria-label="#{nav.register.aria}">
+              <i class="fas fa-user-plus me-1" aria-hidden="true"></i>
               <span th:text="#{nav.register}">Register</span>
             </a>
           </li>
           <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-              <i class="fas fa-user-circle me-1"></i>
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+               data-bs-toggle="dropdown" th:aria-label="#{nav.userMenu.aria}">
+              <i class="fas fa-user-circle me-1" aria-hidden="true"></i>
               <span th:text="${#authentication.name}">User</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#" th:text="#{nav.profile}">Profile</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li>
+                <a class="dropdown-item" href="#" th:text="#{nav.profile}" th:aria-label="#{nav.profile.aria}">Profile</a>
+              </li>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <form th:action="@{/auth/logout}" method="post" class="d-inline">
-                  <button type="submit" class="dropdown-item">
-                    <i class="fas fa-sign-out-alt me-1"></i>
+                  <button type="submit" class="dropdown-item" th:aria-label="#{nav.logout.aria}">
+                    <i class="fas fa-sign-out-alt me-1" aria-hidden="true"></i>
                     <span th:text="#{nav.logout}">Logout</span>
                   </button>
                 </form>
@@ -97,14 +120,14 @@
 <main class="flex-shrink-0">
   <div class="container mt-4 mb-4">
     <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-      <i class="fas fa-exclamation-circle me-2"></i>
+      <i class="fas fa-exclamation-circle me-2" aria-hidden="true"></i>
       <span th:text="${errorMessage}">Error message</span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" th:aria-label="#{common.close}"></button>
     </div>
     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-      <i class="fas fa-check-circle me-2"></i>
+      <i class="fas fa-check-circle me-2" aria-hidden="true"></i>
       <span th:text="${successMessage}">Success message</span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" th:aria-label="#{common.close}"></button>
     </div>
 
     <div layout:fragment="content">
@@ -123,10 +146,18 @@
       <div class="col-md-6 text-md-end">
         <p th:text="#{footer.copyright}">© 2025 Game Encyclopedia. All rights reserved.</p>
         <div class="mt-2">
-          <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="text-white"><i class="fab fa-github"></i></a>
+          <a href="#" class="text-white me-2" th:aria-label="#{social.facebook}">
+            <i class="fab fa-facebook-f" aria-hidden="true"></i>
+          </a>
+          <a href="#" class="text-white me-2" th:aria-label="#{social.twitter}">
+            <i class="fab fa-twitter" aria-hidden="true"></i>
+          </a>
+          <a href="#" class="text-white me-2" th:aria-label="#{social.instagram}">
+            <i class="fab fa-instagram" aria-hidden="true"></i>
+          </a>
+          <a href="#" class="text-white" th:aria-label="#{social.github}">
+            <i class="fab fa-github" aria-hidden="true"></i>
+          </a>
         </div>
       </div>
     </div>

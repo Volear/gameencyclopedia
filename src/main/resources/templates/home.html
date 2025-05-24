@@ -1,58 +1,162 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}"
+      th:lang="${#locale.language}">
 <head>
   <title th:text="#{home.title}">Game Encyclopedia - Home</title>
+  <meta name="description" th:content="#{home.meta.description}" content="Discover and explore your favorite video games in our comprehensive game encyclopedia">
 </head>
 <body>
 <div layout:fragment="content">
-  <h1 class="text-center mb-4" th:text="#{home.header}">Game Encyclopedia</h1>
-  <p class="text-center mb-4" th:text="#{home.description}">Discover and explore your favorite video games!</p>
+  <div class="container">
+    <div class="text-center mb-5">
+      <h1 class="display-4 mb-3" th:text="#{home.header}">Game Encyclopedia</h1>
+      <p class="lead" th:text="#{home.description}">Discover and explore your favorite video games!</p>
 
-  <div class="row justify-content-center mb-5">
-    <div class="col-md-6">
-      <form th:action="@{/search}" method="get" class="d-flex">
-        <input type="text" name="q" class="form-control me-2" th:placeholder="#{home.searchGames}">
-        <button type="submit" class="btn btn-primary">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+          <form th:action="@{/search}" method="get" class="d-flex">
+            <input type="text" name="q" class="form-control me-2"
+                   th:placeholder="#{home.searchGames}"
+                   aria-label="Search games">
+            <button type="submit" class="btn btn-primary" th:aria-label="#{home.search.button.aria}">
+              <i class="fas fa-search"></i>
+              <span class="visually-hidden" th:text="#{home.search.button}">Search</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="mt-4" sec:authorize="isAuthenticated()">
+        <a th:href="@{/game/new}" class="btn btn-success">
+          <i class="fas fa-plus-circle me-2"></i>
+          <span th:text="#{home.addNewGame}">Add New Game</span>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- Games List -->
-  <div class="row">
-    <div th:each="game : ${games}" class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title" th:text="${game.title}">Game Title</h5>
-          <h6 class="card-subtitle mb-2 text-muted">
-            <span th:text="${game.developer}">Developer</span> •
-            <span th:text="${game.releaseYear}">Year</span> •
-            <span th:text="${game.genre}">Genre</span>
-          </h6>
-          <p class="card-text" th:text="${game.description}">Description...</p>
+    <!-- Featured Categories -->
+    <div class="mb-5">
+      <h2 class="h4 mb-4 text-center" th:text="#{home.categories}">Browse by Category</h2>
+      <div class="row justify-content-center">
+        <div class="col-6 col-md-3 mb-3">
+          <a th:href="@{/search(category='action')}" class="btn btn-outline-primary w-100">
+            <i class="fas fa-running me-2"></i>
+            <span th:text="#{home.category.action}">Action</span>
+          </a>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <a th:href="@{/search(category='adventure')}" class="btn btn-outline-primary w-100">
+            <i class="fas fa-map-marked-alt me-2"></i>
+            <span th:text="#{home.category.adventure}">Adventure</span>
+          </a>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <a th:href="@{/search(category='rpg')}" class="btn btn-outline-primary w-100">
+            <i class="fas fa-dragon me-2"></i>
+            <span th:text="#{home.category.rpg}">RPG</span>
+          </a>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <a th:href="@{/search(category='strategy')}" class="btn btn-outline-primary w-100">
+            <i class="fas fa-chess me-2"></i>
+            <span th:text="#{home.category.strategy}">Strategy</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-                                <span class="badge bg-primary me-2" th:if="${game.rating != null}">
-                                    <i class="fas fa-star"></i>
-                                    <span th:text="${game.rating}">4.5</span>
-                                </span>
-              <span class="text-muted" th:if="${game.rating == null}" th:text="#{home.notRated}">Not rated</span>
-              <small class="text-muted">
-                <span th:text="${game.reviewCount}">0</span>
-                <span th:text="#{home.reviews}">review(s)</span>
+    <!-- Games List -->
+    <div class="mb-5">
+      <h2 class="h4 mb-4 text-center" th:text="#{home.latestGames}">Latest Games</h2>
+
+      <div th:if="${#lists.isEmpty(games)}" class="alert alert-info text-center" role="alert">
+        <i class="fas fa-info-circle me-2"></i>
+        <span th:text="#{home.noGames}">No games available at the moment.</span>
+      </div>
+
+      <div class="row" th:unless="${#lists.isEmpty(games)}">
+        <div th:each="game : ${games}" class="col-md-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h3 class="card-title h5" th:text="${game.title}">Game Title</h3>
+              <h4 class="card-subtitle mb-2 text-muted h6">
+                <span th:text="${game.developer}">Developer</span> •
+                <span th:text="${game.releaseYear}">Year</span> •
+                <span th:text="${game.genre}" th:title="#{home.genre.title}">Genre</span>
+              </h4>
+              <p class="card-text" th:text="${game.description}">Description...</p>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="badge bg-primary me-2" th:if="${game.rating != null}">
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    <span th:text="${game.rating}" th:aria-label="#{home.rating.aria(${game.rating})}">4.5</span>
+                  </span>
+                  <span class="text-muted" th:if="${game.rating == null}" th:text="#{home.notRated}">Not rated</span>
+                  <small class="text-muted">
+                    <span th:text="${game.reviewCount}">0</span>
+                    <span th:text="#{home.reviews}">review(s)</span>
+                  </small>
+                </div>
+                <a th:href="@{'/game/' + ${game.id}}" class="btn btn-sm btn-primary"
+                   th:text="#{home.viewDetails}"
+                   th:aria-label="#{home.viewDetails.aria(${game.title})}">View Details</a>
+              </div>
+
+              <small class="text-muted d-block mt-2">
+                <i class="far fa-clock me-1" aria-hidden="true"></i>
+                <span th:text="#{home.added}">Added</span>
+                <time th:datetime="${game.createTime}" th:text="${game.prettyCreateTime}">time</time>
               </small>
             </div>
-            <a th:href="@{'/game/' + ${game.id}}" class="btn btn-primary" th:text="#{home.viewDetails}">View Details</a>
           </div>
+        </div>
+      </div>
 
-          <small class="text-muted d-block mt-2">
-            <span th:text="#{home.added}">Added</span>
-            <span th:text="${game.prettyCreateTime}">time</span>
-          </small>
+      <!-- Pagination -->
+      <nav th:if="${totalPages > 1}" aria-label="Game pages navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" th:classappend="${page == 0 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/?page=' + ${page - 1}}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="visually-hidden" th:text="#{common.previous}">Previous</span>
+            </a>
+          </li>
+          <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+              th:classappend="${i == page ? 'active' : ''}">
+            <a class="page-link" th:href="@{'/?page=' + ${i}}"
+               th:text="${i + 1}"
+               th:aria-label="#{home.pagination.page(${i + 1})}">1</a>
+          </li>
+          <li class="page-item" th:classappend="${page == totalPages - 1 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/?page=' + ${page + 1}}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="visually-hidden" th:text="#{common.next}">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mb-5" sec:authorize="!isAuthenticated()">
+      <div class="card bg-light">
+        <div class="card-body py-5">
+          <h2 class="h4 mb-3" th:text="#{home.cta.title}">Join Our Gaming Community</h2>
+          <p class="mb-4" th:text="#{home.cta.description}">Create an account to add games, write reviews, and connect with other gamers.</p>
+          <div>
+            <a th:href="@{/auth/register}" class="btn btn-primary me-2">
+              <i class="fas fa-user-plus me-2"></i>
+              <span th:text="#{home.cta.register}">Register</span>
+            </a>
+            <a th:href="@{/auth/login}" class="btn btn-outline-primary">
+              <i class="fas fa-sign-in-alt me-2"></i>
+              <span th:text="#{home.cta.login}">Login</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

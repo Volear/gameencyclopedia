@@ -1,34 +1,153 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      th:lang="${#locale.language}">
 <head>
-  <title>Contact - Game Encyclopedia</title>
+  <title th:text="#{contact.title} + ' - ' + #{app.name}">Contact - Game Encyclopedia</title>
+  <meta name="description" th:content="#{contact.meta.description}" content="Contact the Game Encyclopedia team with your questions, suggestions, or feedback">
 </head>
 <body>
 <div layout:fragment="content">
   <div class="row">
     <div class="col-md-6 mx-auto">
-      <h1>Contact Us</h1>
-      <p class="lead">Have questions, suggestions, or feedback? We'd love to hear from you!</p>
+      <div class="text-center mb-4">
+        <h1 th:text="#{contact.header}">Contact Us</h1>
+        <p class="lead" th:text="#{contact.description}">Have questions, suggestions, or feedback? We'd love to hear from you!</p>
+      </div>
 
-      <form action="/contact/submit" method="post" class="mt-4">
-        <div class="mb-3">
-          <label for="name" class="form-label">Your Name</label>
-          <input type="text" class="form-control" id="name" name="name" required>
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a th:href="@{/}" th:text="#{common.home}">Home</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page" th:text="#{contact.title}">Contact</li>
+        </ol>
+      </nav>
+
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="h5 mb-0" th:text="#{contact.form.title}">Send us a message</h2>
         </div>
+        <div class="card-body">
+          <form th:action="@{/contact/submit}" method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label for="name" class="form-label" th:text="#{contact.form.name}">Your Name</label>
+              <input type="text" class="form-control" id="name" name="name"
+                     th:placeholder="#{contact.form.name.placeholder}" required>
+              <div class="invalid-feedback" th:text="#{contact.form.name.required}">
+                Please provide your name.
+              </div>
+            </div>
 
-        <div class="mb-3">
-          <label for="email" class="form-label">Email Address</label>
-          <input type="email" class="form-control" id="email" name="email" required>
+            <div class="mb-3">
+              <label for="email" class="form-label" th:text="#{contact.form.email}">Email Address</label>
+              <input type="email" class="form-control" id="email" name="email"
+                     th:placeholder="#{contact.form.email.placeholder}" required>
+              <div class="invalid-feedback" th:text="#{contact.form.email.required}">
+                Please provide a valid email address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="subject" class="form-label" th:text="#{contact.form.subject}">Subject</label>
+              <input type="text" class="form-control" id="subject" name="subject"
+                     th:placeholder="#{contact.form.subject.placeholder}" required>
+              <div class="invalid-feedback" th:text="#{contact.form.subject.required}">
+                Please provide a subject.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="message" class="form-label" th:text="#{contact.form.message}">Message</label>
+              <textarea class="form-control" id="message" name="message" rows="5"
+                        th:placeholder="#{contact.form.message.placeholder}" required></textarea>
+              <div class="invalid-feedback" th:text="#{contact.form.message.required}">
+                Please provide a message.
+              </div>
+            </div>
+
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="privacy" name="privacy" required>
+              <label class="form-check-label" for="privacy">
+                <span th:text="#{contact.form.privacy.prefix}">I agree to the</span>
+                <a th:href="@{/privacy}" th:text="#{contact.form.privacy.link}">privacy policy</a>
+                <span th:text="#{contact.form.privacy.suffix}">and consent to being contacted.</span>
+              </label>
+              <div class="invalid-feedback" th:text="#{contact.form.privacy.required}">
+                You must agree to the privacy policy.
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" th:text="#{contact.form.submit}">Send Message</button>
+            </div>
+          </form>
         </div>
+      </div>
 
-        <div class="mb-3">
-          <label for="subject" class="form-label">Subject</label>
-          <input type="text" class="form-control" id="subject" name="subject" required>
+      <div class="card mt-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="h5 mb-0" th:text="#{contact.alternative.title}">Alternative Contact Methods</h2>
         </div>
+        <div class="card-body">
+          <div class="d-flex mb-3">
+            <div class="flex-shrink-0 me-3 text-primary">
+              <i class="fas fa-envelope fa-2x"></i>
+            </div>
+            <div>
+              <h3 class="h6" th:text="#{contact.alternative.email}">Email</h3>
+              <p class="mb-0">
+                <a href="mailto:info@gameencyclopedia.com">info@gameencyclopedia.com</a>
+              </p>
+            </div>
+          </div>
 
-        <div class="mb-3">
-          <label for="message" class="form-label">Message</label>
-          <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-        </div
+          <div class="d-flex mb-3">
+            <div class="flex-shrink-0 me-3 text-primary">
+              <i class="fas fa-map-marker-alt fa-2x"></i>
+            </div>
+            <div>
+              <h3 class="h6" th:text="#{contact.alternative.address}">Address</h3>
+              <p class="mb-0" th:text="#{contact.alternative.address.value}">
+                Tbilisi State University, 1 Chavchavadze Ave, Tbilisi, Georgia
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex">
+            <div class="flex-shrink-0 me-3 text-primary">
+              <i class="fas fa-clock fa-2x"></i>
+            </div>
+            <div>
+              <h3 class="h6" th:text="#{contact.alternative.hours}">Office Hours</h3>
+              <p class="mb-0" th:text="#{contact.alternative.hours.value}">
+                Monday - Friday: 9:00 AM - 5:00 PM
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form validation script -->
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      const forms = document.querySelectorAll('.needs-validation');
+
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add('was-validated');
+        }, false);
+      });
+    });
+  </script>
+</div>
+</body>
+</html>

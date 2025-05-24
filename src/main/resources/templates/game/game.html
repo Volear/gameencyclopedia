@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout.html}"
       xmlns:th="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:lang="${#locale.language}">
 <head>
-  <title th:text="${game.title} + ' - Game Encyclopedia'">Game Details</title>
+  <title th:text="${game.title} + ' - ' + #{app.name}">Game Details - Game Encyclopedia</title>
+  <meta name="description" th:content="${game.title} + ' - ' + #{game.meta.description}" content="Game details, reviews, and information">
 </head>
 <body>
 <div layout:fragment="content">
@@ -13,21 +14,30 @@
     <div class="col-md-8">
       <h1 th:text="${game.title}">Game Title</h1>
       <div class="game-info mb-4">
-        <p><strong>Developer:</strong> <span th:text="${game.developer}">Developer</span></p>
-        <p><strong>Release Year:</strong> <span th:text="${game.releaseYear}">Year</span></p>
-        <p><strong>Genre:</strong> <span th:text="${game.genre}">Genre</span></p>
-        <p><strong>Average Rating:</strong>
-          <span th:text="${game.averageRating > 0 ? #numbers.formatDecimal(game.averageRating, 1, 1) + '/5' : 'Not rated'}">Rating</span>
+        <p><strong th:text="#{game.developer} + ':'">Developer:</strong> <span th:text="${game.developer}">Developer</span></p>
+        <p><strong th:text="#{game.releaseYear} + ':'">Release Year:</strong> <span th:text="${game.releaseYear}">Year</span></p>
+        <p><strong th:text="#{game.genre} + ':'">Genre:</strong> <span th:text="${game.genre}">Genre</span></p>
+        <p><strong th:text="#{game.averageRating} + ':'">Average Rating:</strong>
+          <span th:text="${game.averageRating > 0 ? #numbers.formatDecimal(game.averageRating, 1, 1) + '/5' : #{game.notRated}}">Rating</span>
         </p>
       </div>
 
       <div class="description mb-4">
-        <h3>Description</h3>
+        <h3 th:text="#{game.description}">Description</h3>
         <p th:text="${game.description}">Game description</p>
       </div>
 
       <div class="reviews">
-        <h3>Reviews (<span th:text="${game.reviews.size()}">0</span>)</h3>
+        <h3>
+          <span th:text="#{game.reviews}">Reviews</span>
+          (<span th:text="${game.reviews.size()}">0</span>)
+        </h3>
+
+        <!-- No reviews message -->
+        <div th:if="${game.reviews.empty}" class="alert alert-info" th:text="#{game.noReviews}">
+          No reviews yet. Be the first to review this game!
+        </div>
+
         <div th:each="review : ${game.reviews}" class="card mb-3">
           <div class="card-body">
             <h5 class="card-title" th:text="${review.author}">Author</h5>
@@ -36,7 +46,7 @@
               <span th:each="i : ${#numbers.sequence(review.rating + 1, 5)}" class="text-muted">☆</span>
             </div>
             <p class="card-text" th:text="${review.content}">Review content</p>
-            <small class="text-muted" th:text="${review.prettyCreateTime}">Date</small>
+            <small class="text-muted" th:text="#{game.postedOn} + ' ' + ${review.prettyCreateTime}">Posted on Date</small>
           </div>
         </div>
       </div>
@@ -45,38 +55,66 @@
     <div class="col-md-4" sec:authorize="isAuthenticated()">
       <div class="card">
         <div class="card-header">
-          <h5>Add Your Review</h5>
+          <h5 th:text="#{game.addReview}">Add Your Review</h5>
         </div>
         <div class="card-body">
+          <!-- Review submission error message -->
+          <div th:if="${reviewError}" class="alert alert-danger mb-3" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${reviewError}">Error message</span>
+          </div>
+
           <form th:action="@{/review/add}" method="post" th:object="${reviewForm}">
             <input type="hidden" th:field="*{gameId}" />
             <div class="mb-3">
-              <label for="author" class="form-label">Your Name</label>
+              <label for="author" class="form-label" th:text="#{game.review.yourName}">Your Name</label>
               <input type="text" class="form-control" id="author" th:field="*{author}"
+                     th:placeholder="#{game.review.yourName.placeholder}" placeholder="Enter your name"
                      th:classappend="${#fields.hasErrors('author')} ? 'is-invalid' : ''" required>
               <div class="invalid-feedback" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
             </div>
             <div class="mb-3">
-              <label for="rating" class="form-label">Rating</label>
+              <label for="rating" class="form-label" th:text="#{game.review.rating}">Rating</label>
               <select class="form-select" id="rating" th:field="*{rating}"
                       th:classappend="${#fields.hasErrors('rating')} ? 'is-invalid' : ''" required>
-                <option value="">Choose rating...</option>
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
+                <option value="" th:text="#{game.review.chooseRating}">Choose rating...</option>
+                <option value="1" th:text="#{game.review.oneStar}">1 Star</option>
+                <option value="2" th:text="#{game.review.twoStars}">2 Stars</option>
+                <option value="3" th:text="#{game.review.threeStars}">3 Stars</option>
+                <option value="4" th:text="#{game.review.fourStars}">4 Stars</option>
+                <option value="5" th:text="#{game.review.fiveStars}">5 Stars</option>
               </select>
               <div class="invalid-feedback" th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"></div>
             </div>
             <div class="mb-3">
-              <label for="content" class="form-label">Review</label>
+              <label for="content" class="form-label" th:text="#{game.review.content}">Review</label>
               <textarea class="form-control" id="content" th:field="*{content}" rows="4"
+                        th:placeholder="#{game.review.content.placeholder}" placeholder="Write your review here"
                         th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''" required></textarea>
               <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Review</button>
+            <button type="submit" class="btn btn-primary" th:text="#{game.review.submit}">Submit Review</button>
           </form>
+        </div>
+      </div>
+
+      <!-- Back to games list button -->
+      <div class="mt-3">
+        <a th:href="@{/}" class="btn btn-outline-secondary w-100">
+          <i class="fas fa-arrow-left me-2"></i>
+          <span th:text="#{game.backToList}">Back to Games List</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Login prompt for non-authenticated users -->
+    <div class="col-md-4" sec:authorize="!isAuthenticated()">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" th:text="#{game.loginToReview}">Want to leave a review?</h5>
+          <p class="card-text" th:text="#{game.loginToReview.message}">Please log in to share your thoughts about this game.</p>
+          <a th:href="@{/auth/login}" class="btn btn-primary" th:text="#{nav.login}">Login</a>
+          <a th:href="@{/auth/register}" class="btn btn-outline-primary ms-2" th:text="#{nav.register}">Register</a>
         </div>
       </div>
     </div>
