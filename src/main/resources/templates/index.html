@@ -27,7 +27,6 @@
             </div>
         </div>
 
-        <!-- No games message -->
         <div class="col" th:if="${#lists.isEmpty(games)}">
             <div class="alert alert-info" role="alert">
                 <i class="fas fa-info-circle me-2"></i>
@@ -35,7 +34,6 @@
             </div>
         </div>
 
-        <!-- Game cards -->
         <div class="col" th:each="game : ${games}">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -72,7 +70,6 @@
             </div>
         </div>
 
-        <!-- Pagination -->
         <div class="col" th:if="${totalPages > 0}">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">

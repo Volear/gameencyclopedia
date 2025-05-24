@@ -31,7 +31,6 @@
             <span th:text="#{common.backToHome}">Back to Home</span>
           </a>
 
-          <!-- Filter/Sort options dropdown -->
           <div class="dropdown ms-auto" th:if="${!results.empty}">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,7 +61,6 @@
         </div>
       </div>
 
-      <!-- Search statistics -->
       <div class="alert alert-light border mb-4" th:if="${!results.empty}">
         <div class="d-flex justify-content-between align-items-center">
           <span>
@@ -80,7 +78,6 @@
         </div>
       </div>
 
-      <!-- No results message -->
       <div th:if="${results.empty}" class="alert alert-info">
         <h4 class="alert-heading">
           <i class="fas fa-search me-2"></i>
@@ -118,7 +115,6 @@
 
               <p class="card-text" th:text="${game.excerpt}">Game excerpt...</p>
 
-              <!-- Match highlights if available -->
               <div class="mb-3 small" th:if="${game.highlights != null}">
                 <div class="bg-light p-2 rounded">
                   <span class="fw-bold" th:text="#{search.matches}">Matches:</span>
@@ -153,7 +149,6 @@
         </div>
       </div>
 
-      <!-- Pagination -->
       <div class="mt-4" th:if="${totalPages != null && totalPages > 1}">
         <nav aria-label="Search results pagination">
           <ul class="pagination justify-content-center">
@@ -177,7 +172,6 @@
         </nav>
       </div>
 
-      <!-- Related searches -->
       <div class="mt-4" th:if="${relatedSearches != null && !relatedSearches.empty}">
         <h5 th:text="#{search.related}">Related Searches</h5>
         <div class="d-flex flex-wrap gap-2">

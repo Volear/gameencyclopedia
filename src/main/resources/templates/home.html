@@ -37,7 +37,6 @@
       </div>
     </div>
 
-    <!-- Featured Categories -->
     <div class="mb-5">
       <h2 class="h4 mb-4 text-center" th:text="#{home.categories}">Browse by Category</h2>
       <div class="row justify-content-center">
@@ -68,7 +67,6 @@
       </div>
     </div>
 
-    <!-- Games List -->
     <div class="mb-5">
       <h2 class="h4 mb-4 text-center" th:text="#{home.latestGames}">Latest Games</h2>
 
@@ -116,7 +114,6 @@
         </div>
       </div>
 
-      <!-- Pagination -->
       <nav th:if="${totalPages > 1}" aria-label="Game pages navigation" class="mt-4">
         <ul class="pagination justify-content-center">
           <li class="page-item" th:classappend="${page == 0 ? 'disabled' : ''}">
@@ -141,7 +138,6 @@
       </nav>
     </div>
 
-    <!-- Call to Action -->
     <div class="text-center mb-5" sec:authorize="!isAuthenticated()">
       <div class="card bg-light">
         <div class="card-body py-5">
